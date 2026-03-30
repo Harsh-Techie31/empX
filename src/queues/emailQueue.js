@@ -1,9 +1,9 @@
 const { Queue } = require('bullmq');
-const redisOptions = require('../config/redis');
+const connection = require('../config/redis');
 
-// Initialize the queue
+// Initialize the queue safely using the shared ioredis instance
 const emailQueue = new Queue('emailQueue', {
-    connection: redisOptions,
+    connection,
 });
 
 /**

@@ -1,5 +1,5 @@
 const { Worker } = require('bullmq');
-const redisOptions = require('../config/redis');
+const connection = require('../config/redis');
 
 // Initialize the worker for the emailQueue
 const initWorker = () => {
@@ -13,7 +13,7 @@ const initWorker = () => {
         
         // In the future: handle complex sub-workflows (e.g. creating Jira tickets, sending auto-responses, etc.)
     }, {
-        connection: redisOptions,
+        connection,
         concurrency: 5, // Process up to 5 jobs concurrently
     });
 

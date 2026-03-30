@@ -4,10 +4,10 @@ This is an AI-powered email processing pipeline built using Node.js, Express, Mo
 
 ## Prerequisites
 - **Node.js**: v18+ recommended.
-- **MongoDB**: A running MongoDB instance (local or Atlas).
-- **Redis**: A running Redis server for the BullMQ queue system.
-- **OpenAI API Key**: Required for email classification.
-- **Gmail Account / App Passwords**: Since we use IMAP, generate an App Password in your Google Account for basic Auth or use another compatible email provider.
+- **MongoDB**: A running MongoDB Atlas cluster (requires `mongodb+srv://` URI).
+- **Redis (Upstash)**: A cloud Redis instance using a `rediss://` URL.
+- **Gemini API Key**: Required for fast AI classification via REST.
+- **Gmail Account / App Passwords**: Since we use IMAP, generate an App Password in your Google Account.
 
 ## Setup Instructions
 
@@ -19,14 +19,13 @@ This is an AI-powered email processing pipeline built using Node.js, Express, Mo
 3. **Environment Setup**:
    Create a \`.env\` file in the root based on \`.env.example\`:
    \`\`\`env
-   MONGODB_URI=mongodb://localhost:27017/inbox-agent
-   REDIS_HOST=127.0.0.1
-   REDIS_PORT=6379
-   OPENAI_API_KEY=sk-your-key-here
-   IMAP_HOST=imap.gmail.com
+   MONGODB_URI="mongodb+srv://..."
+   REDIS_URL="rediss://default:********@popular-gannet-72063.upstash.io:6379"
+   GEMINI_API_KEY="AIzaSy..."
+   IMAP_HOST="imap.gmail.com"
    IMAP_PORT=993
-   IMAP_USER=your-email@gmail.com
-   IMAP_PASS=your-16-char-app-password
+   IMAP_USER="your-email@gmail.com"
+   IMAP_PASS="your-16-char-app-password"
    POLL_INTERVAL=30000 
    PORT=3000
    \`\`\`

@@ -1,5 +1,5 @@
 const { fetchUnreadEmails, markEmailsAsSeen } = require('../services/emailFetcher');
-const { analyzeEmail } = require('../services/openaiService');
+const { analyzeEmail } = require('../services/geminiService');
 const { resolvePriority } = require('../utils/priorityResolver');
 const Email = require('../models/Email');
 const { pushEmailJob } = require('../queues/emailQueue');

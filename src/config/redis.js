@@ -1,9 +1,14 @@
-// Setup Redis connection options to be used by BullMQ
+const IORedis = require('ioredis');
 
-const redisOptions = {
-    host: process.env.REDIS_HOST || '127.0.0.1',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-    maxRetriesPerRequest: null, // Required for BullMQ
-};
+// Ensure that a REDIS_URL is strictly provided per Upstash requirements
+if (!process.env.REDIS_URL) {
+    throw new Error('REDIS_URL is missing in environment variables. Upstash Redis URL is required.');
+}
 
-module.exports = redisOptions;
+// Create a single IORedis instance using the URL.
+// The `maxRetriesPerRequest: null` configuration is crucial for BullMQ integration.
+const connection = new IORedis(process.env.REDIS_URL, {
+    maxRetriesPerRequest: null,
+});
+
+module.exports = connection;
