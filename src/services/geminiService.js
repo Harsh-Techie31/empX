@@ -29,13 +29,14 @@ Output your response strictly as a JSON object matching this schema without any 
     `;
 
     try {
-        // Hitting the fast gemini-1.5-flash model via REST payload
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // Hitting the latest gemini-3-flash-preview model via REST payload
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'x-goog-api-key': apiKey
             },
             body: JSON.stringify({
                 contents: [{
