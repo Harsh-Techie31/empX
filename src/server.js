@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 
 // Agents & Workers
 const { startAgent } = require('./agents/inboxAgent');
-const { initWorker } = require('./workers/emailWorker');
+// const { initWorker } = require('./workers/emailWorker');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,8 +30,8 @@ const startServer = async () => {
         });
 
         // Start Email Queue Worker
-        initWorker();
-        console.log(`[Server] Background Worker Initialized.`);
+        // initWorker();
+        // console.log(`[Server] Background Worker Initialized.`);
 
         // Start Inbox Agent (polling every 30-60 secs)
         const pollInterval = process.env.POLL_INTERVAL ? parseInt(process.env.POLL_INTERVAL) : 30000;

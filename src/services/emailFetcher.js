@@ -36,7 +36,7 @@ const fetchUnreadEmails = async () => {
         client = await getImapClient();
         
         // Select and lock the INBOX
-        const lock = await client.getbox('INBOX');
+        const lock = await client.mailboxOpen('INBOX');
         
         // Find unread messages
         // 'seen: false' filters to only UNSEEN emails
@@ -74,7 +74,7 @@ const markEmailsAsSeen = async (uids) => {
     let client;
     try {
         client = await getImapClient();
-        await client.getbox('INBOX');
+        await client.mailboxOpen('INBOX');
 
         // Note: Using uid sequence
         await client.messageFlagsAdd(uids, ['\\Seen'], { uid: true });
