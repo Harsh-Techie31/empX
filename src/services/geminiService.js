@@ -22,6 +22,7 @@ Body: ${body}
 Output your response strictly as a JSON object matching this schema without any markdown formatting wrappers (like \`\`\`json):
 {
   "category": "Bug" | "Complaint" | "Feature Request" | "Spam" | "Other",
+  "domain": "AI & Machine Learning" | "Cybersecurity" | "Backend Developer" | "Frontend Developer" | "DevOps" | "Cloud" | "Other",
   "sentiment": (a number between -1.0 (very negative) and 1.0 (very positive)),
   "priority": "Low" | "Medium" | "High" | "Critical",
   "summary": (a 1-sentence summary of the email)
@@ -65,6 +66,7 @@ Output your response strictly as a JSON object matching this schema without any 
         console.error(`[Gemini Service] Error analyzing email: ${error.message}`);
         return {
             category: 'Other',
+            domain: 'Other',
             sentiment: 0,
             priority: 'Low',
             summary: 'Failed to analyze email content due to API error.',

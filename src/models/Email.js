@@ -23,6 +23,16 @@ const emailSchema = new mongoose.Schema({
         enum: ['Bug', 'Complaint', 'Feature Request', 'Spam', 'Other', 'Pending'],
         default: 'Pending',
     },
+    domain: {
+        type: String,
+        enum: ['AI & Machine Learning', 'Cybersecurity', 'Backend Developer', 'Frontend Developer', 'DevOps', 'Cloud', 'Other'],
+        default: 'Other',
+    },
+    incidentId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     sentiment: {
         type: Number,
         min: -1,

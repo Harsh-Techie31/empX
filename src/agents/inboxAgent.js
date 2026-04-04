@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { fetchUnreadEmails, markEmailsAsSeen } = require('../services/emailFetcher');
 const { analyzeEmail } = require('../services/geminiService');
 const { resolvePriority } = require('../utils/priorityResolver');
@@ -35,7 +36,10 @@ const pollInbox = async () => {
                 // 1. Analyze via OpenAI
                 const aiResult = await analyzeEmail(email.subject, email.body);
                 
-                // 2. Resolve Hybrid Priority
+                // 2. Generate Unique Incident ID
+                const incidentId = `INC-${crypto.randomBytes(4).toString('hex').toUpperCase()}-${Date.now()}`;
+
+                // 3. Resolve Hybrid Priority
                 const finalPriority = resolvePriority(
                     aiResult.priority, 
                     aiResult.sentiment, 
@@ -43,25 +47,29 @@ const pollInbox = async () => {
                     email.body
                 );
 
-                // 3. Save to MongoDB
+                // 4. Save to MongoDB
                 const newEmailDoc = await Email.create({
                     messageId: email.messageId,
+                    incidentId: incidentId,
                     subject: email.subject,
-                    body: email.body, // or an excerpt if too large
+                    body: email.body,
                     sender: email.sender,
                     category: aiResult.category,
+                    domain: aiResult.domain || 'Other',
                     sentiment: aiResult.sentiment,
                     priority: finalPriority,
                     summary: aiResult.summary,
-                    status: 'processed', // or 'pending' if queue handles actual business logic
+                    status: 'processed',
                 });
 
-                console.log(`[Inbox Agent] Logged email to DB (ID: ${newEmailDoc._id}, Priority: ${finalPriority}).`);
+                console.log(`[Inbox Agent] Logged email to DB (Incident: ${incidentId}, Priority: ${finalPriority}).`);
 
-                // 4. Push to BullMQ
+                // 5. Push to n8n Webhook
                 await pushEmailJob({
+                    incidentId: newEmailDoc.incidentId,
                     emailId: newEmailDoc._id.toString(),
                     category: newEmailDoc.category,
+                    domain: newEmailDoc.domain,
                     priority: newEmailDoc.priority,
                     summary: newEmailDoc.summary,
                 });
