@@ -64,7 +64,7 @@ const pollInbox = async () => {
 
                 console.log(`[Inbox Agent] Logged email to DB (Incident: ${incidentId}, Priority: ${finalPriority}).`);
 
-                // 5. Push to n8n Webhook
+                // 5. Push to n8n Webhook (Wait for response to send reply)
                 await pushEmailJob({
                     incidentId: newEmailDoc.incidentId,
                     emailId: newEmailDoc._id.toString(),
@@ -72,6 +72,11 @@ const pollInbox = async () => {
                     domain: newEmailDoc.domain,
                     priority: newEmailDoc.priority,
                     summary: newEmailDoc.summary,
+                    // Additional info for replying
+                    senderEmail: newEmailDoc.sender,
+                    originalSubject: newEmailDoc.subject,
+                    originalBody: newEmailDoc.body,
+                    originalMessageId: newEmailDoc.messageId
                 });
 
                 // Prepare to mark as seen
